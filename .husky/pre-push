@@ -1,0 +1,4 @@
+#!/bin/sh
+# Husky pre-push: production ?? ??(build + start)?? chromium ??
+# OAuth credentials are not required for this anonymous browser-mode gate.
+node scripts/run-e2e-gate.mjs

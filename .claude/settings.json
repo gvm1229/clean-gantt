@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm build)",
+      "Bash(pnpm test)",
+      "Bash(pnpm exec vitest run)",
+      "Bash(pnpm exec playwright test*)",
+      "Bash(pnpm exec tsc --noEmit)",
+      "Bash(pnpm exec tsc*)",
+      "Bash(pnpm exec prettier --check*)",
+      "Bash(pnpm tsc*)",
+      "Bash(npx tsc*)",
+      "Bash(pm2 logs*)",
+      "Bash(pm2 list)",
+      "Bash(curl -sI*)",
+      "mcp__plugin_discord_discord__download_attachment",
+      "mcp__plugin_discord_discord__fetch_messages",
+      "mcp__plugin_oh-my-claudecode_t__state_list_active"
+    ]
+  }
+}

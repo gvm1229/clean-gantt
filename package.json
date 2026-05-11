@@ -1,0 +1,57 @@
+{
+  "name": "clean-gantt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:ensure-indexes": "tsx scripts/ensure-indexes.ts",
+    "postinstall": "node scripts/sync-omc-directives.mjs",
+    "sync-omc": "node scripts/sync-omc-directives.mjs",
+    "prepare": "husky || true"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "clsx": "^2.1.1",
+    "html2canvas-pro": "^2.0.2",
+    "lucide-react": "^0.577.0",
+    "mongodb": "^7.2.0",
+    "next": "^16.2.6",
+    "next-auth": "5.0.0-beta.31",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
+    "@playwright/test": "^1.59.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "husky": "^9.1.7",
+    "jsdom": "^28.1.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.3.0",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "packageManager": "pnpm@10.24.0",
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts,tsx,jsx,json,md,css,scss,yaml,yml}": "prettier --write"
+  }
+}
