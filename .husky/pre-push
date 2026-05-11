@@ -1,4 +1,4 @@
 #!/bin/sh
-# Husky pre-push: production ?? ??(build + start)?? chromium ??
+# Husky pre-push: production 유사 환경(build + start)에서 chromium 검증
 # OAuth credentials are not required for this anonymous browser-mode gate.
 node scripts/run-e2e-gate.mjs
