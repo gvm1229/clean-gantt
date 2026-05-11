@@ -3,6 +3,21 @@
 This is the canonical agent manifest for this project. Claude Code, OpenAI Codex, and Google Gemini all read from here.
 Directives, prompts, and reference assets live under `.agents/`. Tool-specific config (`.claude/`, `.codex/`, `.gemini/`) only holds tool-local settings.
 
+## Project context
+
+`clean-gantt` is a standalone hosted Gantt chart web app built with Next.js, React, TypeScript, Tailwind CSS, NextAuth, MongoDB, Vitest, and Playwright.
+
+Core product direction:
+
+- This is a hosted user-facing site, not a self-deploy/admin project.
+- No admin dashboard is planned; owner/operator work happens directly in source code.
+- Anonymous users can create and edit Gantt charts in the browser.
+- Anonymous charts persist only in browser localStorage until the user clears browser data.
+- The app must keep a visible warning when a user is not logged in, explaining local-only persistence.
+- Signed-in users will persist charts to MongoDB.
+- Authentication supports only Google OAuth and GitHub OAuth.
+- The editable Gantt UI should combine the existing local-first Gantt functionality with a split task-grid + timeline experience inspired by OnlineGantt.
+
 ## User directives (canonical)
 
 Direct edits go here.
@@ -11,8 +26,8 @@ Direct edits go here.
 - [.agents/directives/02-code.md](.agents/directives/02-code.md) — Coding rules, comment formatting, file naming, testing policy.
 - [.agents/directives/03-design.md](.agents/directives/03-design.md) — Design system, Tailwind usage, UI implementation details.
 - [.agents/directives/04-workflow.md](.agents/directives/04-workflow.md) — Branch strategy, commit/PR conventions, testing gates, documentation.
-- [.agents/directives/05-architecture.md](.agents/directives/05-architecture.md) — Project structure, directory layout, PDF export, pitfalls, MCP guide.
-- [.agents/directives/06-security.md](.agents/directives/06-security.md) — Trust boundaries, MDX trust model, R2/route guard-rails, lessons from past security fixes.
+- [.agents/directives/05-architecture.md](.agents/directives/05-architecture.md) — Project structure, Next.js app layout, MongoDB persistence, Gantt editor pitfalls, MCP guide.
+- [.agents/directives/06-security.md](.agents/directives/06-security.md) — Trust boundaries, OAuth-only auth, localStorage caveats, MongoDB/route guard-rails.
 
 ## OMC directives (auto-synced from `.claude/rules/`)
 

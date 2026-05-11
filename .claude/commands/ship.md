@@ -25,7 +25,7 @@ Commit the current unstaged changes following these rules strictly:
    <type>: <Korean description> (v<version>)
    ```
 
-   The `(v<version>)` suffix is **mandatory** for PortareFolium and must match the bumped `package.json` version (see rule 3).
+   The `(v<version>)` suffix is not mandatory for clean-gantt unless the user explicitly asks for a release/version bump.
 
    **Commit body format (mandatory for any non-trivial commit):** Match the concise Korean file-scoped bullet style of the canonical example commit `02e080e539a608a24e134aa29ff8ccf44b557e42`.
 
@@ -42,7 +42,7 @@ Commit the current unstaged changes following these rules strictly:
    - Use file/path-scoped bullets. Group related files in one bullet when they belong to the same concern.
    - Use concise Korean statement-like noun/verb-noun endings such as `추가`, `정리`, `보강`, `반영`, `제거`, `갱신`, `적용`.
    - Do **not** write prose sentences like `~한다.`, `~했다.`, `~합니다.`, or long rationale paragraphs.
-   - Do **not** include Lore trailers (`Constraint:`, `Rejected:`, `Tested:`, etc.) in normal PortareFolium commits unless the user explicitly asks for them for that commit.
+   - Do **not** include Lore trailers (`Constraint:`, `Rejected:`, `Tested:`, etc.) in normal clean-gantt commits unless the user explicitly asks for them for that commit.
    - For a tiny single-file/docs-only change, a subject-only commit is allowed only when the last two human commits also use subject-only style.
    - Before committing, run `git log -2 --format=full` and compare the drafted message against this body style. If it does not look like `02e080e...`, rewrite it before `git commit`.
 
