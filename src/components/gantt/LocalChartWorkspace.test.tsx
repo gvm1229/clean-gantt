@@ -121,6 +121,75 @@ describe("LocalChartWorkspace", () => {
     );
   });
 
+  it("imports CSV tasks into the active local chart", async () => {
+    const user = userEvent.setup();
+    render(<LocalChartWorkspace isLoggedIn={false} />);
+
+    await user.click(
+      screen.getAllByRole("button", { name: /새 차트 만들기/i })[1],
+    );
+
+    const file = new File(
+      [
+        "task name,category,start date,end date,comment\n",
+        "CSV Alpha,Planning,2026-05-01,2026-05-03,First import\n",
+        '"CSV, Beta",Build,2026-05-04,2026-05-05,"quoted, note"\n',
+      ],
+      "roadmap.csv",
+      { type: "text/csv" },
+    );
+
+    await user.upload(screen.getByLabelText("CSV 파일 가져오기"), file);
+
+    expect(await screen.findByDisplayValue("CSV Alpha")).toBeVisible();
+    expect(screen.getByDisplayValue("CSV, Beta")).toBeVisible();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "2개 작업을 CSV에서 가져왔습니다",
+    );
+
+    const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]");
+    expect(stored[0].tasks).toHaveLength(2);
+    expect(stored[0].tasks[1]).toEqual(
+      expect.objectContaining({
+        taskName: "CSV, Beta",
+        category: "Build",
+        startDate: "2026-05-04",
+        endDate: "2026-05-05",
+        comment: "quoted, note",
+      }),
+    );
+  });
+
+  it("exports the active chart as a CSV download", async () => {
+    const user = userEvent.setup();
+    const createObjectURL = vi.fn(() => "blob:gantt-csv");
+    const revokeObjectURL = vi.fn();
+    const clickDownload = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => undefined);
+
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: createObjectURL,
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: revokeObjectURL,
+    });
+
+    render(<LocalChartWorkspace isLoggedIn={false} />);
+
+    await user.click(
+      screen.getAllByRole("button", { name: /새 차트 만들기/i })[1],
+    );
+    await user.click(screen.getByRole("button", { name: /CSV 내보내기/i }));
+
+    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(clickDownload).toHaveBeenCalled();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:gantt-csv");
+    expect(screen.getByRole("status")).toHaveTextContent("CSV 내보내기 완료");
+  });
+
   it("loads existing local charts and can delete a local copy", async () => {
     const user = userEvent.setup();
     window.localStorage.setItem(

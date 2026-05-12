@@ -1,19 +1,27 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle,
   CalendarDays,
   ChevronRight,
+  Download,
   GripVertical,
   Milestone,
   Plus,
   Search,
   Trash2,
+  Upload,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import { OAuthSignInLinks } from "@/components/auth/OAuthSignInLinks";
+import {
+  getGanttCsvTitle,
+  makeGanttCsvFileName,
+  parseGanttCsv,
+  serializeGanttCsv,
+} from "@/lib/gantt/csv";
 import type { GanttTask, GanttTaskType } from "@/lib/gantt/types";
 import { normalizeGanttTasks } from "@/lib/gantt/validation";
 import {
@@ -380,6 +388,11 @@ function GanttEditor({
 }) {
   const [search, setSearch] = useState("");
   const [taskPaneWidth, setTaskPaneWidth] = useState(720);
+  const [csvMessage, setCsvMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const filteredTasks = chart.tasks.filter((task) => {
     const query = search.trim().toLowerCase();
     if (!query) return true;
@@ -401,6 +414,59 @@ function GanttEditor({
     onPatchChart({
       categoryColors: { ...chart.categoryColors, [category]: color },
     });
+  };
+
+  const handleCsvImport = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    if (!file) return;
+
+    const input = event.currentTarget;
+
+    void file
+      .text()
+      .then((content) => {
+        const parsedTasks = parseGanttCsv(content);
+        const importedTasks = parsedTasks.map((task, order) =>
+          makeTask(order, {
+            ...task,
+            category: task.category || "일반",
+          }),
+        );
+
+        onPatchChart({
+          title: chart.title.trim() ? chart.title : getGanttCsvTitle(file.name),
+          tasks: importedTasks,
+        });
+        setCsvMessage({
+          type: "success",
+          text: `${importedTasks.length}개 작업을 CSV에서 가져왔습니다`,
+        });
+      })
+      .catch((error: unknown) => {
+        setCsvMessage({
+          type: "error",
+          text: error instanceof Error ? error.message : "CSV 파싱 오류",
+        });
+      })
+      .finally(() => {
+        input.value = "";
+      });
+  };
+
+  const handleCsvExport = () => {
+    const blob = new Blob(["\uFEFF", serializeGanttCsv(chart.tasks)], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = makeGanttCsvFileName(chart.title);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    setCsvMessage({ type: "success", text: "CSV 내보내기 완료" });
   };
 
   return (
@@ -461,14 +527,50 @@ function GanttEditor({
             </span>
           </label>
           <button
-            className="inline-flex h-9 items-center gap-2 rounded-sm bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700"
+            className="inline-flex h-9 items-center gap-2 rounded-sm border border-blue-100 bg-white px-4 text-sm font-semibold whitespace-nowrap text-blue-800 hover:bg-blue-50"
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload className="h-4 w-4" />
+            CSV 가져오기
+          </button>
+          <button
+            className="inline-flex h-9 items-center gap-2 rounded-sm border border-blue-100 bg-white px-4 text-sm font-semibold whitespace-nowrap text-blue-800 hover:bg-blue-50"
+            type="button"
+            onClick={handleCsvExport}
+          >
+            <Download className="h-4 w-4" />
+            CSV 내보내기
+          </button>
+          <button
+            className="inline-flex h-9 items-center gap-2 rounded-sm bg-blue-600 px-4 text-sm font-semibold whitespace-nowrap text-white hover:bg-blue-700"
             type="button"
             onClick={onAddTask}
           >
             <Plus className="h-4 w-4" />
             작업 추가
           </button>
+          <input
+            ref={fileInputRef}
+            accept=".csv,text/csv"
+            aria-label="CSV 파일 가져오기"
+            className="sr-only"
+            type="file"
+            onChange={handleCsvImport}
+          />
         </div>
+        {csvMessage && (
+          <p
+            className={`w-full rounded-sm border px-3 py-2 text-sm ${
+              csvMessage.type === "success"
+                ? "border-blue-100 bg-blue-50 text-blue-900"
+                : "border-red-200 bg-red-50 text-red-700"
+            }`}
+            role={csvMessage.type === "success" ? "status" : "alert"}
+          >
+            {csvMessage.text}
+          </p>
+        )}
       </div>
 
       <div className="flex min-h-0 flex-1 bg-blue-50/30">
