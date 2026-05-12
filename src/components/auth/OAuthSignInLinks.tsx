@@ -35,14 +35,14 @@ export const OAuthSignInLinks = ({
       href="/api/auth/signin/google"
     >
       <GoogleMark />
-      Sign in with Google
+      Google로 로그인
     </a>
     <a
       className={`${oauthButtonClass} bg-black text-white hover:bg-black active:bg-black`}
       href="/api/auth/signin/github"
     >
       <Github className="h-4 w-4" />
-      Sign in with GitHub
+      GitHub로 로그인
     </a>
   </div>
 );

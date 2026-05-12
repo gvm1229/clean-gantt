@@ -4,18 +4,18 @@ import { CalendarDays, FileJson, ImageDown, PanelsTopLeft } from "lucide-react";
 const benefits = [
   {
     icon: PanelsTopLeft,
-    title: "Split workspace ready",
-    body: "Planned for a table + timeline editor while keeping the current presentation-grade export mode.",
+    title: "표와 일정표를 한 화면에",
+    body: "작업 목록과 Gantt 일정을 함께 편집하고, 보기 좋은 이미지로 내보낼 수 있게 준비 중입니다.",
   },
   {
     icon: FileJson,
-    title: "Portable by design",
-    body: "Anonymous charts stay in localStorage; signed-in users can persist to MongoDB later.",
+    title: "가볍게 시작하기",
+    body: "로그인 전에는 브라우저에 저장하고, 로그인하면 MongoDB에 안전하게 저장할 수 있습니다.",
   },
   {
     icon: ImageDown,
-    title: "Export-first workflow",
-    body: "The existing JPG export direction remains a core differentiator for portfolio-ready charts.",
+    title: "공유하기 쉬운 결과물",
+    body: "포트폴리오와 보고서에 바로 넣을 수 있는 선명한 이미지 내보내기를 목표로 합니다.",
   },
 ];
 
@@ -32,13 +32,13 @@ export default function HomePage() {
             className="text-[var(--color-muted)] hover:text-[var(--color-foreground)]"
             href="/app"
           >
-            App
+            앱
           </Link>
           <Link
             className="rounded-full bg-[var(--color-accent)] px-4 py-2 font-medium text-white hover:bg-[var(--color-accent-strong)]"
             href="/app"
           >
-            Start planning
+            시작하기
           </Link>
         </div>
       </nav>
@@ -46,16 +46,15 @@ export default function HomePage() {
       <section className="grid flex-1 items-center gap-10 py-20 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-8">
           <div className="inline-flex rounded-full border border-teal-200 bg-teal-50 px-4 py-2 text-sm font-medium text-teal-800">
-            Hosted app setup · local-first charts
+            웹에서 바로 시작 · 브라우저 우선 저장
           </div>
           <div className="space-y-5">
             <h1 className="text-5xl font-bold tracking-tight text-slate-950 md:text-6xl">
-              Visual-first Gantt charts without the heavyweight project suite.
+              복잡한 도구 없이 보기 좋은 Gantt 차트를 만드세요.
             </h1>
             <p className="max-w-2xl text-lg leading-8 text-[var(--color-muted)]">
-              Ganttfolio is being structured as a hosted app: anyone can create
-              charts in the browser, then sign in with Google or GitHub when
-              they want cloud persistence.
+              Ganttfolio는 설치 없이 쓰는 Gantt 차트 앱입니다. 먼저 브라우저에서
+              만들고, 필요할 때 Google 또는 GitHub로 로그인해 저장할 수 있어요.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -63,13 +62,13 @@ export default function HomePage() {
               className="rounded-full bg-slate-950 px-5 py-3 font-semibold text-white hover:bg-slate-800"
               href="/app"
             >
-              Create a browser chart
+              차트 만들기
             </Link>
             <Link
               className="rounded-full border border-[var(--color-border)] bg-white px-5 py-3 font-semibold text-slate-800 hover:bg-slate-50"
               href="/app"
             >
-              Continue without account
+              계정 없이 계속하기
             </Link>
           </div>
         </div>
@@ -78,15 +77,15 @@ export default function HomePage() {
           <div className="rounded-[1.5rem] bg-slate-950 p-5 text-white">
             <div className="mb-5 flex items-center justify-between">
               <div>
-                <p className="text-sm text-teal-200">Project preview</p>
-                <h2 className="text-xl font-semibold">Launch roadmap</h2>
+                <p className="text-sm text-teal-200">프로젝트 미리보기</p>
+                <h2 className="text-xl font-semibold">출시 로드맵</h2>
               </div>
               <span className="rounded-full bg-teal-400/20 px-3 py-1 text-xs text-teal-100">
-                1080p export
+                1080p 내보내기
               </span>
             </div>
             <div className="space-y-3">
-              {["Setup", "MongoDB", "Workspace", "Export"].map(
+              {["설정", "MongoDB", "작업 공간", "내보내기"].map(
                 (label, index) => (
                   <div
                     key={label}
