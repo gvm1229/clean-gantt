@@ -379,6 +379,7 @@ function GanttEditor({
   onDeleteTask: (taskId: string) => void;
 }) {
   const [search, setSearch] = useState("");
+  const [taskPaneWidth, setTaskPaneWidth] = useState(720);
   const filteredTasks = chart.tasks.filter((task) => {
     const query = search.trim().toLowerCase();
     if (!query) return true;
@@ -414,8 +415,8 @@ function GanttEditor({
             onChange={(event) => onPatchChart({ title: event.target.value })}
           />
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <label className="flex items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 py-2 text-sm font-medium text-blue-900">
+        <div className="flex flex-wrap items-stretch gap-2">
+          <label className="flex h-9 items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 text-sm font-medium text-blue-900">
             간격
             <select
               className="bg-transparent outline-none"
@@ -433,7 +434,7 @@ function GanttEditor({
               ))}
             </select>
           </label>
-          <label className="flex items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 py-2 text-sm text-blue-800">
+          <label className="flex h-9 items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 text-sm text-blue-800">
             <Search className="h-4 w-4" />
             <input
               aria-label="작업 검색"
@@ -443,8 +444,24 @@ function GanttEditor({
               placeholder="검색"
             />
           </label>
+          <label className="flex h-9 items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 text-sm text-blue-800">
+            작업표 폭
+            <input
+              aria-label="작업표 폭"
+              className="w-28 accent-blue-600"
+              max={960}
+              min={560}
+              step={20}
+              type="range"
+              value={taskPaneWidth}
+              onChange={(event) => setTaskPaneWidth(Number(event.target.value))}
+            />
+            <span className="w-12 text-right text-xs tabular-nums">
+              {taskPaneWidth}
+            </span>
+          </label>
           <button
-            className="inline-flex items-center gap-2 rounded-sm bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+            className="inline-flex h-9 items-center gap-2 rounded-sm bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700"
             type="button"
             onClick={onAddTask}
           >
@@ -457,22 +474,23 @@ function GanttEditor({
       <div className="flex min-h-0 flex-1 bg-blue-50/30">
         <div
           aria-label="작업 목록"
-          className="w-[680px] shrink-0 overflow-auto rounded-sm border-r border-blue-100 bg-white"
+          className="shrink-0 overflow-auto rounded-sm border-r border-blue-100 bg-white"
           role="region"
+          style={{ width: taskPaneWidth }}
         >
-          <table className="w-full border-separate border-spacing-0 text-sm">
+          <table className="w-full table-fixed border-separate border-spacing-0 text-sm">
             <thead className="sticky top-0 z-20 bg-blue-50">
-              <tr className="text-left text-xs font-semibold tracking-wide text-slate-700 uppercase">
+              <tr className="text-left text-xs font-semibold tracking-wide whitespace-nowrap text-slate-700 uppercase">
                 <th className="w-10 px-2 py-3" />
                 <th className="w-12 px-2 py-3">ID</th>
-                <th className="min-w-48 px-2 py-3">작업명</th>
-                <th className="w-28 px-2 py-3">시작</th>
-                <th className="w-28 px-2 py-3">종료</th>
-                <th className="w-24 px-2 py-3">기간</th>
+                <th className="w-56 px-2 py-3">작업명</th>
+                <th className="w-32 px-2 py-3">시작</th>
+                <th className="w-32 px-2 py-3">종료</th>
+                <th className="w-20 px-2 py-3">기간</th>
                 <th className="w-24 px-2 py-3">진행률 %</th>
                 <th className="w-28 px-2 py-3">선행 작업</th>
-                <th className="w-28 px-2 py-3">색상</th>
-                <th className="w-10 px-2 py-3" />
+                <th className="w-36 px-2 py-3">색상</th>
+                <th className="w-32 px-2 py-3">유형</th>
               </tr>
             </thead>
             <tbody>
@@ -486,7 +504,7 @@ function GanttEditor({
 
                 return (
                   <tr
-                    className="border-b border-blue-50 hover:bg-blue-50/70"
+                    className="border-b border-blue-50 whitespace-nowrap hover:bg-blue-50/70"
                     key={task.id}
                     style={{ height: ROW_HEIGHT }}
                   >
@@ -496,7 +514,7 @@ function GanttEditor({
                     <td className="px-2 font-mono text-xs text-slate-700">
                       {absoluteIndex + 1}
                     </td>
-                    <td className="px-2">
+                    <td className="min-w-0 px-2">
                       <div className="flex items-center gap-2">
                         {task.type === "milestone" ? (
                           <Milestone className="h-4 w-4 text-blue-400" />
@@ -505,7 +523,7 @@ function GanttEditor({
                         )}
                         <input
                           aria-label={`${absoluteIndex + 1}행 작업명`}
-                          className="min-w-36 flex-1 bg-transparent font-medium text-slate-950 outline-none"
+                          className="min-w-0 flex-1 truncate bg-transparent font-medium text-slate-950 outline-none"
                           value={task.taskName}
                           onChange={(event) =>
                             updateTask(task.id, {
@@ -518,7 +536,7 @@ function GanttEditor({
                     <td className="px-2">
                       <input
                         aria-label={`${absoluteIndex + 1}행 시작일`}
-                        className="w-32 bg-transparent outline-none"
+                        className="w-full bg-transparent outline-none"
                         type="date"
                         value={task.startDate}
                         onChange={(event) =>
@@ -529,7 +547,7 @@ function GanttEditor({
                     <td className="px-2">
                       <input
                         aria-label={`${absoluteIndex + 1}행 종료일`}
-                        className="w-32 bg-transparent outline-none"
+                        className="w-full bg-transparent outline-none"
                         type="date"
                         value={task.endDate}
                         onChange={(event) =>
@@ -543,7 +561,7 @@ function GanttEditor({
                     <td className="px-2">
                       <input
                         aria-label={`${absoluteIndex + 1}행 진행률`}
-                        className="w-20 rounded-sm border border-slate-200 px-2 py-1 outline-none focus:border-blue-400"
+                        className="w-full rounded-sm border border-slate-200 px-2 py-1 outline-none focus:border-blue-400"
                         max={100}
                         min={0}
                         type="number"
@@ -561,7 +579,7 @@ function GanttEditor({
                     <td className="px-2">
                       <input
                         aria-label={`${absoluteIndex + 1}행 선행 작업`}
-                        className="w-24 bg-transparent outline-none"
+                        className="w-full bg-transparent outline-none"
                         placeholder={
                           visibleIndex === 0 ? "" : `${absoluteIndex}FS`
                         }
@@ -740,24 +758,16 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
       <div className="grid min-h-0 flex-1 gap-4 overflow-hidden xl:grid-cols-[17rem_minmax(0,1fr)]">
         <aside className="flex min-h-0 flex-col overflow-hidden rounded-sm border border-blue-100 bg-white p-4">
           <div className="shrink-0">
-            <div className="flex items-start justify-between gap-3">
+            <div>
               <div>
                 <h2 className="text-lg font-semibold">내 브라우저 차트</h2>
                 <p className="mt-1 text-sm text-slate-700">
                   {loaded ? `${charts.length}개 차트` : "차트 불러오는 중..."}
                 </p>
               </div>
-              <button
-                className="rounded-sm bg-blue-600 p-2 text-white hover:bg-blue-700"
-                type="button"
-                onClick={createChart}
-                aria-label="새 차트 만들기"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
             </div>
             <button
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+              className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-sm bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700"
               type="button"
               onClick={createChart}
             >
@@ -790,17 +800,17 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
                     type="button"
                     onClick={() => setActiveChartId(chart.id)}
                   >
-                    <h3 className="font-semibold text-slate-950">
+                    <h3 className="truncate whitespace-nowrap font-semibold text-slate-950">
                       {chart.title}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-700">
+                    <p className="mt-1 truncate whitespace-nowrap text-xs text-slate-700">
                       작업 {chart.tasks.length}개 ·{" "}
                       {formatDateTime(chart.updatedAt)}
                       업데이트
                     </p>
                   </button>
                   <button
-                    className="mt-3 inline-flex items-center gap-2 rounded-sm border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                    className="mt-3 inline-flex h-8 items-center gap-2 rounded-sm border border-red-200 px-3 text-xs font-medium whitespace-nowrap text-red-700 hover:bg-red-50"
                     type="button"
                     onClick={() => deleteChart(chart.id)}
                   >
@@ -831,7 +841,7 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
                 자동 저장, 진행률, 마일스톤, 선행 작업, 분류, 색상을 지원합니다.
               </p>
               <button
-                className="rounded-sm bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
+                className="inline-flex h-10 items-center rounded-sm bg-blue-600 px-5 font-semibold text-white hover:bg-blue-700"
                 type="button"
                 onClick={createChart}
               >

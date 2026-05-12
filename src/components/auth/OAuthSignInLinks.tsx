@@ -1,7 +1,7 @@
 ﻿import { Github } from "lucide-react";
 
 const oauthButtonClass =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors";
+  "inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-sm border px-4 text-sm font-bold uppercase tracking-wide transition-colors";
 
 const GoogleMark = () => (
   <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
