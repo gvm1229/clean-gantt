@@ -5,8 +5,6 @@ import {
   AlertTriangle,
   CalendarDays,
   ChevronRight,
-  Cloud,
-  Github,
   GripVertical,
   Milestone,
   Plus,
@@ -15,6 +13,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
+import { OAuthSignInLinks } from "@/components/auth/OAuthSignInLinks";
 import type { GanttTask, GanttTaskType } from "@/lib/gantt/types";
 import { normalizeGanttTasks } from "@/lib/gantt/validation";
 import {
@@ -717,22 +716,7 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
                 may disappear if you clear browser data, use another device, or
                 open a private window.
               </p>
-              <div className="flex flex-wrap gap-2 text-sm">
-                <a
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 font-semibold text-white"
-                  href="/api/auth/signin/google"
-                >
-                  <Cloud className="h-4 w-4" />
-                  Sign in with Google to save
-                </a>
-                <a
-                  className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white px-4 py-2 font-semibold text-amber-950"
-                  href="/api/auth/signin/github"
-                >
-                  <Github className="h-4 w-4" />
-                  GitHub
-                </a>
-              </div>
+              <OAuthSignInLinks />
             </div>
           </div>
         </div>

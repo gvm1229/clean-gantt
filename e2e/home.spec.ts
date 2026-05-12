@@ -25,12 +25,22 @@ test("anonymous app exposes only Google and GitHub sign-in choices", async ({
     .getByRole("alert")
     .filter({ hasText: "Browser-only mode is active" });
   await expect(storageWarning).toContainText("Browser-only mode");
-  await expect(
-    page.getByRole("link", { name: /^Google login$/i }),
-  ).toHaveAttribute("href", "/api/auth/signin/google");
-  await expect(
-    page.getByRole("link", { name: /^GitHub login$/i }),
-  ).toHaveAttribute("href", "/api/auth/signin/github");
+  const googleLinks = page.getByRole("link", {
+    name: /^Sign in with Google$/i,
+  });
+  const githubLinks = page.getByRole("link", {
+    name: /^Sign in with GitHub$/i,
+  });
+  await expect(googleLinks).toHaveCount(2);
+  await expect(githubLinks).toHaveCount(2);
+  await expect(googleLinks.first()).toHaveAttribute(
+    "href",
+    "/api/auth/signin/google",
+  );
+  await expect(githubLinks.first()).toHaveAttribute(
+    "href",
+    "/api/auth/signin/github",
+  );
   await expect(page.getByText(/password|email login|magic link/i)).toHaveCount(
     0,
   );

@@ -65,13 +65,12 @@ export default function HomePage() {
             >
               Create a browser chart
             </Link>
-            <a
+            <Link
               className="rounded-full border border-[var(--color-border)] bg-white px-5 py-3 font-semibold text-slate-800 hover:bg-slate-50"
-              href="https://github.com/"
-              rel="noreferrer"
+              href="/app"
             >
-              Repo link pending
-            </a>
+              Continue without account
+            </Link>
           </div>
         </div>
 

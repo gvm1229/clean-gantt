@@ -1,5 +1,6 @@
 ﻿import Link from "next/link";
 import { auth } from "@/auth";
+import { OAuthSignInLinks } from "@/components/auth/OAuthSignInLinks";
 import { LocalChartWorkspace } from "@/components/gantt/LocalChartWorkspace";
 
 export const dynamic = "force-dynamic";
@@ -38,25 +39,10 @@ export default async function AppPage() {
                 : "Not signed in — charts stay in this browser only."}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {!isLoggedIn && (
-              <>
-                <a
-                  className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white"
-                  href="/api/auth/signin/google"
-                >
-                  Google login
-                </a>
-                <a
-                  className="rounded-full border border-[var(--color-border)] px-5 py-3 text-sm font-semibold"
-                  href="/api/auth/signin/github"
-                >
-                  GitHub login
-                </a>
-              </>
-            )}
+          <div className="flex flex-wrap items-center gap-2">
+            {!isLoggedIn && <OAuthSignInLinks />}
             <Link
-              className="rounded-full border border-[var(--color-border)] px-5 py-3 text-sm font-semibold"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full border border-[var(--color-border)] bg-white px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
               href="/"
             >
               Back home
