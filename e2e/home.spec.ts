@@ -8,10 +8,15 @@ const createLocalChart = async (page: Page) => {
     .click();
 };
 
-test("landing page links to browser chart workspace", async ({ page }) => {
+test("root page opens the gantt chart editor directly", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("link", { name: /차트 만들기/i })).toBeVisible();
-  await expect(page.getByText("웹에서 바로 시작")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Gantt Chart Editor" }),
+  ).toBeVisible();
+  await expect(page.getByText("내 브라우저 차트")).toBeVisible();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "브라우저 저장 모드입니다" }),
+  ).toBeVisible();
 });
 
 test("anonymous app exposes only Google and GitHub sign-in choices", async ({
@@ -77,6 +82,23 @@ test("anonymous app edits a local gantt task and autosaves it", async ({
   await expect(page.getByLabel("1행 작업명")).toHaveValue("업체 조사");
   await expect(page.getByLabel("1행 진행률")).toHaveValue("75");
   await expect(page.getByLabel("2행 선행 작업")).toHaveValue("1FS");
+});
+
+test("anonymous app renders task table and bars beyond row two", async ({
+  page,
+}) => {
+  await page.goto("/app");
+  await createLocalChart(page);
+
+  await expect(page.getByLabel("3행 작업명")).toHaveValue("출시 마일스톤");
+  await expect(page.getByLabel("출시 마일스톤 마일스톤")).toBeVisible();
+
+  await page.getByRole("button", { name: "작업 추가" }).click();
+  await page.getByRole("button", { name: "작업 추가" }).click();
+
+  await expect(page.getByLabel("5행 작업명")).toHaveValue("작업 5");
+  await expect(page.getByLabel("작업 4 일정 막대")).toBeVisible();
+  await expect(page.getByLabel("작업 5 일정 막대")).toBeVisible();
 });
 
 test("anonymous app can delete a browser-only chart", async ({ page }) => {

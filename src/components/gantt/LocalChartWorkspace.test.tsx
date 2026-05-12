@@ -71,6 +71,33 @@ describe("LocalChartWorkspace", () => {
     );
   });
 
+  it("renders table cells and timeline bars for rows beyond row two", async () => {
+    const user = userEvent.setup();
+    render(<LocalChartWorkspace isLoggedIn={false} />);
+
+    await user.click(
+      screen.getAllByRole("button", { name: /새 차트 만들기/i })[1],
+    );
+
+    expect(await screen.findByLabelText("3행 작업명")).toHaveValue(
+      "출시 마일스톤",
+    );
+    expect(screen.getByLabelText("출시 마일스톤 마일스톤")).toHaveStyle({
+      top: "12px",
+    });
+
+    await user.click(screen.getByRole("button", { name: /작업 추가/i }));
+    await user.click(screen.getByRole("button", { name: /작업 추가/i }));
+
+    expect(await screen.findByLabelText("5행 작업명")).toHaveValue("작업 5");
+    expect(screen.getByLabelText("작업 4 일정 막대")).toHaveStyle({
+      top: "8px",
+    });
+    expect(screen.getByLabelText("작업 5 일정 막대")).toHaveStyle({
+      top: "8px",
+    });
+  });
+
   it("edits task cells and autosaves changes to localStorage", async () => {
     const user = userEvent.setup();
     render(<LocalChartWorkspace isLoggedIn={false} />);

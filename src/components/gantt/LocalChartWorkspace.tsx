@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -29,14 +29,14 @@ import {
 const STORAGE_KEY = "ganttfolio.localCharts.v1";
 const ROW_HEIGHT = 44;
 const BASE_DAY_WIDTH = 34;
-const DEFAULT_COLOR = "#14b8a6";
+const DEFAULT_COLOR = "#2563eb";
 const CATEGORY_COLORS = [
-  "#14b8a6",
   "#2563eb",
-  "#a855f7",
-  "#f97316",
-  "#16a34a",
-  "#dc2626",
+  "#38bdf8",
+  "#1d4ed8",
+  "#60a5fa",
+  "#0ea5e9",
+  "#7c3aed",
   "#64748b",
 ];
 
@@ -234,21 +234,21 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
   return (
     <div
       aria-label="Gantt 일정표"
-      className="min-w-0 flex-1 overflow-auto border-l border-slate-200 bg-white"
+      className="min-w-0 flex-1 overflow-auto rounded-sm border-l border-blue-100 bg-white"
       role="region"
     >
-      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2">
+      <div className="sticky top-0 z-20 flex items-center justify-between border-b border-blue-100 bg-white/95 px-4 py-2">
         <div>
-          <p className="text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase">
+          <p className="text-xs font-semibold tracking-[0.2em] text-blue-400 uppercase">
             일정표
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-700">
             총 {days.length}일 · {chart.columnSpan}일 간격
           </p>
         </div>
         <div className="flex items-center gap-1">
           <button
-            className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-sm border border-blue-100 p-2 text-blue-700 hover:bg-blue-50"
             type="button"
             onClick={() => setZoom((value) => clampZoom(value / 1.15))}
             aria-label="일정표 축소"
@@ -256,14 +256,14 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
             <ZoomOut className="h-4 w-4" />
           </button>
           <button
-            className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-sm border border-blue-100 p-2 text-blue-700 hover:bg-blue-50"
             type="button"
             onClick={() => setZoom(1)}
           >
             맞춤
           </button>
           <button
-            className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
+            className="rounded-sm border border-blue-100 p-2 text-blue-700 hover:bg-blue-50"
             type="button"
             onClick={() => setZoom((value) => clampZoom(value * 1.15))}
             aria-label="일정표 확대"
@@ -274,11 +274,11 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
       </div>
 
       <div style={{ width: timelineWidth }}>
-        <div className="sticky top-[57px] z-10 border-b border-slate-200 bg-white">
+        <div className="sticky top-[57px] z-10 border-b border-blue-100 bg-white/95">
           <div className="flex h-8">
             {months.map((month) => (
               <div
-                className="border-r border-slate-200 px-3 py-1 text-sm font-semibold text-slate-700"
+                className="border-r border-blue-100 px-3 py-1 text-sm font-semibold text-blue-900"
                 key={month.key}
                 style={{ width: month.span * dayWidth }}
               >
@@ -289,7 +289,7 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
           <div className="relative flex h-8">
             {columns.map((column) => (
               <div
-                className="border-r border-slate-200 px-1 text-center text-xs font-semibold text-slate-700"
+                className="border-r border-blue-100 px-1 text-center text-xs font-semibold text-blue-800"
                 key={column.key}
                 style={{ width: column.span * dayWidth }}
               >
@@ -303,8 +303,8 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
           {days.map((day, index) => (
             <div
               aria-hidden="true"
-              className={`absolute top-0 bottom-0 border-r border-slate-200 ${
-                day.isWeekend ? "bg-slate-50" : "bg-transparent"
+              className={`absolute top-0 bottom-0 border-r border-blue-100 ${
+                day.isWeekend ? "bg-blue-50/70" : "bg-transparent"
               }`}
               key={day.key}
               style={{ left: index * dayWidth, width: dayWidth }}
@@ -319,7 +319,7 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
               12,
             );
             const left = startIndex * dayWidth + 4;
-            const top = index * ROW_HEIGHT + 8;
+            const top = 8;
             const color =
               task.color ||
               getCategoryColor(task.category, chart.categoryColors);
@@ -327,20 +327,20 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
 
             return (
               <div
-                className="relative border-b border-slate-100"
+                className="relative border-b border-blue-50"
                 key={`${task.id}-row-track`}
                 style={{ height: ROW_HEIGHT }}
               >
                 {task.type === "milestone" ? (
                   <div
                     aria-label={`${task.taskName} 마일스톤`}
-                    className="absolute h-5 w-5 rotate-45 rounded-sm shadow-sm"
+                    className="absolute h-5 w-5 rotate-45 rounded-sm"
                     style={{ left, top: top + 4, backgroundColor: color }}
                   />
                 ) : (
                   <div
                     aria-label={`${task.taskName} 일정 막대`}
-                    className="absolute overflow-hidden rounded-md bg-slate-300 text-xs font-semibold text-white shadow-sm"
+                    className="absolute overflow-hidden rounded-sm bg-blue-300 text-xs font-semibold text-white"
                     style={{
                       left,
                       top,
@@ -403,19 +403,19 @@ function GanttEditor({
   };
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-blue-100 bg-white">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-blue-100 px-4 py-3">
         <div className="flex min-w-[18rem] flex-1 items-center gap-3">
-          <CalendarDays className="h-5 w-5 text-teal-600" />
+          <CalendarDays className="h-5 w-5 text-blue-600" />
           <input
             aria-label="차트 제목"
-            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-lg font-semibold text-slate-900 outline-none focus:border-teal-400"
+            className="min-w-0 flex-1 rounded-sm border border-blue-100 bg-white px-3 py-2 text-lg font-semibold text-slate-950 outline-none transition focus:border-blue-400"
             value={chart.title}
             onChange={(event) => onPatchChart({ title: event.target.value })}
           />
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700">
+          <label className="flex items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 py-2 text-sm font-medium text-blue-900">
             간격
             <select
               className="bg-transparent outline-none"
@@ -433,18 +433,18 @@ function GanttEditor({
               ))}
             </select>
           </label>
-          <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 rounded-sm border border-blue-100 bg-white px-3 py-2 text-sm text-blue-800">
             <Search className="h-4 w-4" />
             <input
               aria-label="작업 검색"
-              className="w-32 bg-transparent outline-none"
+              className="w-32 rounded-sm bg-transparent outline-none"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="검색"
             />
           </label>
           <button
-            className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+            className="inline-flex items-center gap-2 rounded-sm bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
             type="button"
             onClick={onAddTask}
           >
@@ -454,11 +454,15 @@ function GanttEditor({
         </div>
       </div>
 
-      <div className="flex h-[640px] min-h-0">
-        <div className="w-[680px] shrink-0 overflow-auto border-r border-slate-200 bg-white">
-          <table className="w-full border-collapse text-sm">
-            <thead className="sticky top-0 z-20 bg-white shadow-[0_1px_0_#e2e8f0]">
-              <tr className="text-left text-xs font-semibold tracking-wide text-slate-500 uppercase">
+      <div className="flex min-h-0 flex-1 bg-blue-50/30">
+        <div
+          aria-label="작업 목록"
+          className="w-[680px] shrink-0 overflow-auto rounded-sm border-r border-blue-100 bg-white"
+          role="region"
+        >
+          <table className="w-full border-separate border-spacing-0 text-sm">
+            <thead className="sticky top-0 z-20 bg-blue-50">
+              <tr className="text-left text-xs font-semibold tracking-wide text-slate-700 uppercase">
                 <th className="w-10 px-2 py-3" />
                 <th className="w-12 px-2 py-3">ID</th>
                 <th className="min-w-48 px-2 py-3">작업명</th>
@@ -482,26 +486,26 @@ function GanttEditor({
 
                 return (
                   <tr
-                    className="border-b border-slate-100 hover:bg-teal-50/40"
+                    className="border-b border-blue-50 hover:bg-blue-50/70"
                     key={task.id}
                     style={{ height: ROW_HEIGHT }}
                   >
-                    <td className="px-2 text-slate-300">
+                    <td className="px-2 text-blue-200">
                       <GripVertical className="h-4 w-4" />
                     </td>
-                    <td className="px-2 font-mono text-xs text-slate-500">
+                    <td className="px-2 font-mono text-xs text-slate-700">
                       {absoluteIndex + 1}
                     </td>
                     <td className="px-2">
                       <div className="flex items-center gap-2">
                         {task.type === "milestone" ? (
-                          <Milestone className="h-4 w-4 text-slate-400" />
+                          <Milestone className="h-4 w-4 text-blue-400" />
                         ) : (
-                          <ChevronRight className="h-4 w-4 text-slate-300" />
+                          <ChevronRight className="h-4 w-4 text-blue-200" />
                         )}
                         <input
                           aria-label={`${absoluteIndex + 1}행 작업명`}
-                          className="min-w-36 flex-1 bg-transparent font-medium text-slate-900 outline-none"
+                          className="min-w-36 flex-1 bg-transparent font-medium text-slate-950 outline-none"
                           value={task.taskName}
                           onChange={(event) =>
                             updateTask(task.id, {
@@ -533,13 +537,13 @@ function GanttEditor({
                         }
                       />
                     </td>
-                    <td className="px-2 text-slate-600">
+                    <td className="px-2 text-slate-700">
                       {countTaskDays(task)}일
                     </td>
                     <td className="px-2">
                       <input
                         aria-label={`${absoluteIndex + 1}행 진행률`}
-                        className="w-20 rounded-lg border border-slate-200 px-2 py-1 outline-none focus:border-teal-400"
+                        className="w-20 rounded-sm border border-slate-200 px-2 py-1 outline-none focus:border-blue-400"
                         max={100}
                         min={0}
                         type="number"
@@ -583,7 +587,7 @@ function GanttEditor({
                         />
                         <input
                           aria-label={`${absoluteIndex + 1}행 색상`}
-                          className="h-7 w-8 rounded border border-slate-200 bg-white"
+                          className="h-7 w-8 rounded-sm border border-blue-100 bg-white"
                           type="color"
                           value={color}
                           onChange={(event) => {
@@ -599,28 +603,30 @@ function GanttEditor({
                       </div>
                     </td>
                     <td className="px-2">
-                      <select
-                        aria-label={`${absoluteIndex + 1}행 작업 유형`}
-                        className="mb-1 w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs outline-none"
-                        value={task.type}
-                        onChange={(event) =>
-                          updateTask(task.id, {
-                            type: event.target.value as GanttTaskType,
-                          })
-                        }
-                      >
-                        <option value="task">작업</option>
-                        <option value="milestone">마일스톤</option>
-                        <option value="summary">요약</option>
-                      </select>
-                      <button
-                        aria-label={`${absoluteIndex + 1}행 작업 삭제`}
-                        className="rounded-lg p-1 text-slate-400 hover:bg-red-50 hover:text-red-600"
-                        type="button"
-                        onClick={() => onDeleteTask(task.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <select
+                          aria-label={`${absoluteIndex + 1}행 작업 유형`}
+                          className="w-20 rounded-sm border border-blue-100 bg-white px-2 py-1 text-xs outline-none"
+                          value={task.type}
+                          onChange={(event) =>
+                            updateTask(task.id, {
+                              type: event.target.value as GanttTaskType,
+                            })
+                          }
+                        >
+                          <option value="task">작업</option>
+                          <option value="milestone">마일스톤</option>
+                          <option value="summary">요약</option>
+                        </select>
+                        <button
+                          aria-label={`${absoluteIndex + 1}행 작업 삭제`}
+                          className="rounded-sm p-1 text-blue-400 hover:bg-red-50 hover:text-red-600"
+                          type="button"
+                          onClick={() => onDeleteTask(task.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -700,11 +706,11 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
   };
 
   return (
-    <section className="space-y-5">
+    <section className="flex h-full min-h-0 flex-col gap-4 overflow-hidden">
       {!isLoggedIn && (
         <div
           role="alert"
-          className="sticky top-4 z-30 rounded-3xl border border-amber-300 bg-amber-50 p-5 text-amber-950 shadow-lg shadow-amber-900/10"
+          className="shrink-0 rounded-sm border border-blue-200 bg-blue-50 p-4 text-blue-950"
         >
           <div className="flex gap-3">
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
@@ -722,7 +728,7 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
       )}
 
       {isLoggedIn && (
-        <div className="rounded-3xl border border-teal-200 bg-teal-50 p-5 text-teal-950">
+        <div className="shrink-0 rounded-sm border border-blue-200 bg-blue-50 p-4 text-blue-950">
           <h2 className="font-semibold">로그인 저장을 사용할 수 있어요</h2>
           <p className="mt-1 text-sm">
             로컬 초안은 계속 편집할 수 있습니다. 다음 단계에서는 계정별 차트를
@@ -731,64 +737,70 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
         </div>
       )}
 
-      <div className="grid gap-5 xl:grid-cols-[16rem_minmax(0,1fr)]">
-        <aside className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-semibold">내 브라우저 차트</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                {loaded ? `${charts.length}개 차트` : "차트 불러오는 중..."}
-              </p>
+      <div className="grid min-h-0 flex-1 gap-4 overflow-hidden xl:grid-cols-[17rem_minmax(0,1fr)]">
+        <aside className="flex min-h-0 flex-col overflow-hidden rounded-sm border border-blue-100 bg-white p-4">
+          <div className="shrink-0">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold">내 브라우저 차트</h2>
+                <p className="mt-1 text-sm text-slate-700">
+                  {loaded ? `${charts.length}개 차트` : "차트 불러오는 중..."}
+                </p>
+              </div>
+              <button
+                className="rounded-sm bg-blue-600 p-2 text-white hover:bg-blue-700"
+                type="button"
+                onClick={createChart}
+                aria-label="새 차트 만들기"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
             </div>
             <button
-              className="rounded-full bg-teal-600 p-2 text-white hover:bg-teal-700"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-sm bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
               type="button"
               onClick={createChart}
-              aria-label="새 차트 만들기"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4" />새 차트 만들기
             </button>
           </div>
-          <button
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-            type="button"
-            onClick={createChart}
-          >
-            <Plus className="h-4 w-4" />새 차트 만들기
-          </button>
 
-          <div className="mt-4 space-y-2">
+          <div
+            aria-label="브라우저 차트 목록"
+            className="mt-4 min-h-0 flex-1 space-y-2 overflow-auto pr-1"
+            role="region"
+          >
             {sortedCharts.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">
+              <div className="rounded-sm border border-dashed border-slate-200 p-4 text-sm text-slate-700">
                 아직 차트가 없어요. 새 차트를 만들어 작업표와 일정을 편집해
                 보세요.
               </div>
             ) : (
               sortedCharts.map((chart) => (
                 <article
-                  className={`rounded-2xl border p-3 ${
+                  className={`rounded-sm border p-3 ${
                     chart.id === activeChartId
-                      ? "border-teal-300 bg-teal-50"
-                      : "border-slate-200 bg-white"
+                      ? "border-blue-300 bg-blue-50"
+                      : "border-blue-100 bg-white"
                   }`}
                   key={chart.id}
                 >
                   <button
-                    className="block w-full text-left"
+                    className="block w-full rounded-sm text-left"
                     type="button"
                     onClick={() => setActiveChartId(chart.id)}
                   >
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-slate-950">
                       {chart.title}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-slate-700">
                       작업 {chart.tasks.length}개 ·{" "}
                       {formatDateTime(chart.updatedAt)}
                       업데이트
                     </p>
                   </button>
                   <button
-                    className="mt-3 inline-flex items-center gap-2 rounded-full border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                    className="mt-3 inline-flex items-center gap-2 rounded-sm border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
                     type="button"
                     onClick={() => deleteChart(chart.id)}
                   >
@@ -809,17 +821,17 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
             onDeleteTask={deleteTask}
           />
         ) : (
-          <div className="flex min-h-[480px] items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
+          <div className="flex min-h-0 items-center justify-center rounded-sm border border-dashed border-blue-200 bg-white/90 p-10 text-center">
             <div className="max-w-md space-y-3">
               <h2 className="text-2xl font-bold text-slate-950">
                 차트를 만들고 편집을 시작하세요
               </h2>
-              <p className="text-slate-500">
+              <p className="text-slate-700">
                 표처럼 작업을 입력하고 일정 막대를 바로 확인할 수 있어요. 로컬
                 자동 저장, 진행률, 마일스톤, 선행 작업, 분류, 색상을 지원합니다.
               </p>
               <button
-                className="rounded-full bg-slate-950 px-5 py-3 font-semibold text-white hover:bg-slate-800"
+                className="rounded-sm bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
                 type="button"
                 onClick={createChart}
               >

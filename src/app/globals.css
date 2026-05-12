@@ -1,14 +1,14 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
-  --color-background: #f6f7fb;
-  --color-foreground: #172033;
-  --color-muted: #667085;
+  --color-background: #e2e8f0;
+  --color-foreground: #0f172a;
+  --color-muted: #475569;
   --color-surface: #ffffff;
-  --color-surface-subtle: #eef2f7;
-  --color-border: #d9e0ea;
-  --color-accent: #0f766e;
-  --color-accent-strong: #115e59;
+  --color-surface-subtle: #dbeafe;
+  --color-border: #94a3b8;
+  --color-accent: #1d4ed8;
+  --color-accent-strong: #1e3a8a;
 }
 
 * {
@@ -17,14 +17,13 @@
 
 html,
 body {
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, #dff8f4 0, transparent 32rem),
-    var(--color-background);
+  background: var(--color-background);
   color: var(--color-foreground);
   font-family:
     Inter,
@@ -40,5 +39,11 @@ body {
   a {
     color: inherit;
     text-decoration: none;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
   }
 }

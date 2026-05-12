@@ -1,7 +1,7 @@
-import { Github } from "lucide-react";
+﻿import { Github } from "lucide-react";
 
 const oauthButtonClass =
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-3 text-sm font-semibold shadow-sm transition-colors";
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm border px-4 py-2 text-sm font-bold uppercase tracking-wide transition-colors";
 
 const GoogleMark = () => (
   <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 24 24">
@@ -31,14 +31,14 @@ export const OAuthSignInLinks = ({
 }) => (
   <div className={`flex flex-wrap gap-2 ${className}`}>
     <a
-      className={`${oauthButtonClass} border border-slate-300 bg-white text-slate-700 hover:bg-slate-50`}
+      className={`${oauthButtonClass} border-slate-900 bg-white text-slate-950 hover:bg-blue-50`}
       href="/api/auth/signin/google"
     >
       <GoogleMark />
       Google로 로그인
     </a>
     <a
-      className={`${oauthButtonClass} bg-black text-white hover:bg-black active:bg-black`}
+      className={`${oauthButtonClass} border-blue-950 bg-blue-950 text-white hover:bg-blue-800`}
       href="/api/auth/signin/github"
     >
       <Github className="h-4 w-4" />
