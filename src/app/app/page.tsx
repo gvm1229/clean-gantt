@@ -1,5 +1,5 @@
 ﻿import Link from "next/link";
-import { auth } from "@/auth";
+import { auth, isJwtSessionError } from "@/auth";
 import { OAuthSignInLinks } from "@/components/auth/OAuthSignInLinks";
 import { LocalChartWorkspace } from "@/components/gantt/LocalChartWorkspace";
 
@@ -15,7 +15,17 @@ const nextSteps = [
 
 async function getOptionalSession() {
   if (!process.env.AUTH_SECRET) return null;
-  return auth();
+
+  try {
+    return await auth();
+  } catch (error) {
+    if (error instanceof Error && isJwtSessionError(error)) return null;
+    console.error(
+      "[AppPage::getOptionalSession] Auth session lookup failed",
+      error,
+    );
+    return null;
+  }
 }
 
 export default async function AppPage() {
