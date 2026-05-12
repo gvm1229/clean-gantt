@@ -65,7 +65,8 @@ type TaskPatch = Partial<
 >;
 
 const makeId = () => crypto.randomUUID();
-const formatDateTime = (value: string) => new Date(value).toLocaleString();
+const formatDateTime = (value: string) =>
+  new Date(value).toLocaleString("ko-KR");
 const clampZoom = (value: number) => Math.min(2, Math.max(0.55, value));
 
 function getCategoryColor(category: string, colors: Record<string, string>) {
@@ -81,8 +82,8 @@ function makeTask(order: number, patch: Partial<GanttTask> = {}): GanttTask {
   return {
     id: patch.id ?? makeId(),
     order,
-    taskName: patch.taskName ?? `Task ${order + 1}`,
-    category: patch.category ?? "General",
+    taskName: patch.taskName ?? `작업 ${order + 1}`,
+    category: patch.category ?? "일반",
     startDate,
     endDate,
     comment: patch.comment ?? "",
@@ -100,23 +101,23 @@ function makeStarterTasks(): GanttTask[] {
   const today = todayKey();
   return [
     makeTask(0, {
-      taskName: "Project kickoff",
-      category: "Planning",
+      taskName: "프로젝트 시작",
+      category: "계획",
       startDate: today,
       endDate: addDays(today, 2),
       progress: 60,
     }),
     makeTask(1, {
-      taskName: "Design timeline",
-      category: "Design",
+      taskName: "일정 설계",
+      category: "디자인",
       startDate: addDays(today, 3),
       endDate: addDays(today, 7),
       progress: 35,
       dependency: "1FS",
     }),
     makeTask(2, {
-      taskName: "Launch milestone",
-      category: "Release",
+      taskName: "출시 마일스톤",
+      category: "출시",
       startDate: addDays(today, 9),
       endDate: addDays(today, 9),
       type: "milestone",
@@ -129,14 +130,14 @@ function makeStarterChart(nextIndex: number): LocalChart {
   const now = new Date().toISOString();
   return {
     id: makeId(),
-    title: `Untitled Gantt ${nextIndex}`,
+    title: `새 Gantt ${nextIndex}`,
     createdAt: now,
     updatedAt: now,
     tasks: makeStarterTasks(),
     categoryColors: {
-      Planning: CATEGORY_COLORS[0],
-      Design: CATEGORY_COLORS[1],
-      Release: CATEGORY_COLORS[3],
+      계획: CATEGORY_COLORS[0],
+      디자인: CATEGORY_COLORS[1],
+      출시: CATEGORY_COLORS[3],
     },
     columnSpan: 1,
   };
@@ -165,7 +166,7 @@ function normalizeChart(value: unknown, index: number): LocalChart | null {
     title:
       typeof row.title === "string" && row.title.trim()
         ? row.title.trim()
-        : `Untitled Gantt ${index + 1}`,
+        : `새 Gantt ${index + 1}`,
     createdAt:
       typeof row.createdAt === "string" && row.createdAt ? row.createdAt : now,
     updatedAt:
@@ -232,17 +233,17 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
 
   return (
     <div
-      aria-label="Gantt timeline"
+      aria-label="Gantt 일정표"
       className="min-w-0 flex-1 overflow-auto border-l border-slate-200 bg-white"
       role="region"
     >
       <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-2">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-slate-400 uppercase">
-            Timeline
+            일정표
           </p>
           <p className="text-xs text-slate-500">
-            {days.length} days · {chart.columnSpan} day columns
+            총 {days.length}일 · {chart.columnSpan}일 간격
           </p>
         </div>
         <div className="flex items-center gap-1">
@@ -250,7 +251,7 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
             className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
             type="button"
             onClick={() => setZoom((value) => clampZoom(value / 1.15))}
-            aria-label="Zoom out timeline"
+            aria-label="일정표 축소"
           >
             <ZoomOut className="h-4 w-4" />
           </button>
@@ -259,13 +260,13 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
             type="button"
             onClick={() => setZoom(1)}
           >
-            Fit
+            맞춤
           </button>
           <button
             className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50"
             type="button"
             onClick={() => setZoom((value) => clampZoom(value * 1.15))}
-            aria-label="Zoom in timeline"
+            aria-label="일정표 확대"
           >
             <ZoomIn className="h-4 w-4" />
           </button>
@@ -332,13 +333,13 @@ function GanttTimeline({ chart }: { chart: LocalChart }) {
               >
                 {task.type === "milestone" ? (
                   <div
-                    aria-label={`${task.taskName} milestone`}
+                    aria-label={`${task.taskName} 마일스톤`}
                     className="absolute h-5 w-5 rotate-45 rounded-sm shadow-sm"
                     style={{ left, top: top + 4, backgroundColor: color }}
                   />
                 ) : (
                   <div
-                    aria-label={`${task.taskName} timeline bar`}
+                    aria-label={`${task.taskName} 일정 막대`}
                     className="absolute overflow-hidden rounded-md bg-slate-300 text-xs font-semibold text-white shadow-sm"
                     style={{
                       left,
@@ -407,7 +408,7 @@ function GanttEditor({
         <div className="flex min-w-[18rem] flex-1 items-center gap-3">
           <CalendarDays className="h-5 w-5 text-teal-600" />
           <input
-            aria-label="Chart title"
+            aria-label="차트 제목"
             className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-lg font-semibold text-slate-900 outline-none focus:border-teal-400"
             value={chart.title}
             onChange={(event) => onPatchChart({ title: event.target.value })}
@@ -415,7 +416,7 @@ function GanttEditor({
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700">
-            Scale
+            간격
             <select
               className="bg-transparent outline-none"
               value={chart.columnSpan}
@@ -427,7 +428,7 @@ function GanttEditor({
             >
               {[1, 2, 3, 5, 7].map((span) => (
                 <option key={span} value={span}>
-                  {span} day{span === 1 ? "" : "s"}
+                  {span}일
                 </option>
               ))}
             </select>
@@ -435,11 +436,11 @@ function GanttEditor({
           <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-600">
             <Search className="h-4 w-4" />
             <input
-              aria-label="Search tasks"
+              aria-label="작업 검색"
               className="w-32 bg-transparent outline-none"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search"
+              placeholder="검색"
             />
           </label>
           <button
@@ -448,7 +449,7 @@ function GanttEditor({
             onClick={onAddTask}
           >
             <Plus className="h-4 w-4" />
-            Add task
+            작업 추가
           </button>
         </div>
       </div>
@@ -460,13 +461,13 @@ function GanttEditor({
               <tr className="text-left text-xs font-semibold tracking-wide text-slate-500 uppercase">
                 <th className="w-10 px-2 py-3" />
                 <th className="w-12 px-2 py-3">ID</th>
-                <th className="min-w-48 px-2 py-3">Task Name</th>
-                <th className="w-28 px-2 py-3">Start</th>
-                <th className="w-28 px-2 py-3">End</th>
-                <th className="w-24 px-2 py-3">Duration</th>
-                <th className="w-24 px-2 py-3">Progress %</th>
-                <th className="w-28 px-2 py-3">Dependency</th>
-                <th className="w-28 px-2 py-3">Color</th>
+                <th className="min-w-48 px-2 py-3">작업명</th>
+                <th className="w-28 px-2 py-3">시작</th>
+                <th className="w-28 px-2 py-3">종료</th>
+                <th className="w-24 px-2 py-3">기간</th>
+                <th className="w-24 px-2 py-3">진행률 %</th>
+                <th className="w-28 px-2 py-3">선행 작업</th>
+                <th className="w-28 px-2 py-3">색상</th>
                 <th className="w-10 px-2 py-3" />
               </tr>
             </thead>
@@ -499,7 +500,7 @@ function GanttEditor({
                           <ChevronRight className="h-4 w-4 text-slate-300" />
                         )}
                         <input
-                          aria-label={`Task name row ${absoluteIndex + 1}`}
+                          aria-label={`${absoluteIndex + 1}행 작업명`}
                           className="min-w-36 flex-1 bg-transparent font-medium text-slate-900 outline-none"
                           value={task.taskName}
                           onChange={(event) =>
@@ -512,7 +513,7 @@ function GanttEditor({
                     </td>
                     <td className="px-2">
                       <input
-                        aria-label={`Start date row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 시작일`}
                         className="w-32 bg-transparent outline-none"
                         type="date"
                         value={task.startDate}
@@ -523,7 +524,7 @@ function GanttEditor({
                     </td>
                     <td className="px-2">
                       <input
-                        aria-label={`End date row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 종료일`}
                         className="w-32 bg-transparent outline-none"
                         type="date"
                         value={task.endDate}
@@ -533,12 +534,11 @@ function GanttEditor({
                       />
                     </td>
                     <td className="px-2 text-slate-600">
-                      {countTaskDays(task)} day
-                      {countTaskDays(task) === 1 ? "" : "s"}
+                      {countTaskDays(task)}일
                     </td>
                     <td className="px-2">
                       <input
-                        aria-label={`Progress row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 진행률`}
                         className="w-20 rounded-lg border border-slate-200 px-2 py-1 outline-none focus:border-teal-400"
                         max={100}
                         min={0}
@@ -556,7 +556,7 @@ function GanttEditor({
                     </td>
                     <td className="px-2">
                       <input
-                        aria-label={`Dependency row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 선행 작업`}
                         className="w-24 bg-transparent outline-none"
                         placeholder={
                           visibleIndex === 0 ? "" : `${absoluteIndex}FS`
@@ -572,7 +572,7 @@ function GanttEditor({
                     <td className="px-2">
                       <div className="flex items-center gap-2">
                         <input
-                          aria-label={`Category row ${absoluteIndex + 1}`}
+                          aria-label={`${absoluteIndex + 1}행 분류`}
                           className="w-24 bg-transparent outline-none"
                           value={task.category}
                           onChange={(event) =>
@@ -582,7 +582,7 @@ function GanttEditor({
                           }
                         />
                         <input
-                          aria-label={`Color row ${absoluteIndex + 1}`}
+                          aria-label={`${absoluteIndex + 1}행 색상`}
                           className="h-7 w-8 rounded border border-slate-200 bg-white"
                           type="color"
                           value={color}
@@ -600,7 +600,7 @@ function GanttEditor({
                     </td>
                     <td className="px-2">
                       <select
-                        aria-label={`Task type row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 작업 유형`}
                         className="mb-1 w-24 rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs outline-none"
                         value={task.type}
                         onChange={(event) =>
@@ -609,12 +609,12 @@ function GanttEditor({
                           })
                         }
                       >
-                        <option value="task">Task</option>
-                        <option value="milestone">Milestone</option>
-                        <option value="summary">Summary</option>
+                        <option value="task">작업</option>
+                        <option value="milestone">마일스톤</option>
+                        <option value="summary">요약</option>
                       </select>
                       <button
-                        aria-label={`Delete task row ${absoluteIndex + 1}`}
+                        aria-label={`${absoluteIndex + 1}행 작업 삭제`}
                         className="rounded-lg p-1 text-slate-400 hover:bg-red-50 hover:text-red-600"
                         type="button"
                         onClick={() => onDeleteTask(task.id)}
@@ -709,12 +709,11 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
           <div className="flex gap-3">
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
             <div className="space-y-2">
-              <h2 className="font-semibold">Browser-only mode is active</h2>
+              <h2 className="font-semibold">브라우저 저장 모드입니다</h2>
               <p className="text-sm leading-6">
-                You can freely create and edit Gantt charts now. Until you sign
-                in, charts are saved only in this browser with localStorage and
-                may disappear if you clear browser data, use another device, or
-                open a private window.
+                지금 바로 Gantt 차트를 만들고 편집할 수 있어요. 로그인하기
+                전에는 이 브라우저의 localStorage에만 저장되며, 브라우저
+                데이터를 지우거나 다른 기기를 쓰면 사라질 수 있습니다.
               </p>
               <OAuthSignInLinks />
             </div>
@@ -724,10 +723,10 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
 
       {isLoggedIn && (
         <div className="rounded-3xl border border-teal-200 bg-teal-50 p-5 text-teal-950">
-          <h2 className="font-semibold">Signed-in persistence is available</h2>
+          <h2 className="font-semibold">로그인 저장을 사용할 수 있어요</h2>
           <p className="mt-1 text-sm">
-            Local drafts remain editable here. The next implementation pass will
-            sync saved charts to MongoDB for your account.
+            로컬 초안은 계속 편집할 수 있습니다. 다음 단계에서는 계정별 차트를
+            MongoDB에 저장할 예정입니다.
           </p>
         </div>
       )}
@@ -736,18 +735,16 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
         <aside className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-semibold">Your browser charts</h2>
+              <h2 className="text-lg font-semibold">내 브라우저 차트</h2>
               <p className="mt-1 text-sm text-slate-500">
-                {loaded
-                  ? `${charts.length} local chart${charts.length === 1 ? "" : "s"}`
-                  : "Loading local charts..."}
+                {loaded ? `${charts.length}개 차트` : "차트 불러오는 중..."}
               </p>
             </div>
             <button
               className="rounded-full bg-teal-600 p-2 text-white hover:bg-teal-700"
               type="button"
               onClick={createChart}
-              aria-label="Create local chart"
+              aria-label="새 차트 만들기"
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -757,15 +754,14 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
             type="button"
             onClick={createChart}
           >
-            <Plus className="h-4 w-4" />
-            Create local chart
+            <Plus className="h-4 w-4" />새 차트 만들기
           </button>
 
           <div className="mt-4 space-y-2">
             {sortedCharts.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-slate-200 p-4 text-sm text-slate-500">
-                No local charts yet. Create one to start editing a real Gantt
-                grid and timeline.
+                아직 차트가 없어요. 새 차트를 만들어 작업표와 일정을 편집해
+                보세요.
               </div>
             ) : (
               sortedCharts.map((chart) => (
@@ -786,8 +782,9 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
                       {chart.title}
                     </h3>
                     <p className="mt-1 text-xs text-slate-500">
-                      {chart.tasks.length} task · updated{" "}
+                      작업 {chart.tasks.length}개 ·{" "}
                       {formatDateTime(chart.updatedAt)}
+                      업데이트
                     </p>
                   </button>
                   <button
@@ -796,7 +793,7 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
                     onClick={() => deleteChart(chart.id)}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
-                    Delete local copy
+                    로컬 사본 삭제
                   </button>
                 </article>
               ))
@@ -815,19 +812,18 @@ export function LocalChartWorkspace({ isLoggedIn }: { isLoggedIn: boolean }) {
           <div className="flex min-h-[480px] items-center justify-center rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm">
             <div className="max-w-md space-y-3">
               <h2 className="text-2xl font-bold text-slate-950">
-                Create a local chart to open the editor
+                차트를 만들고 편집을 시작하세요
               </h2>
               <p className="text-slate-500">
-                The editor combines a spreadsheet-like task grid with a live
-                Gantt timeline, local autosave, progress bars, milestones,
-                dependencies, categories, and colors.
+                표처럼 작업을 입력하고 일정 막대를 바로 확인할 수 있어요. 로컬
+                자동 저장, 진행률, 마일스톤, 선행 작업, 분류, 색상을 지원합니다.
               </p>
               <button
                 className="rounded-full bg-slate-950 px-5 py-3 font-semibold text-white hover:bg-slate-800"
                 type="button"
                 onClick={createChart}
               >
-                Create local chart
+                새 차트 만들기
               </button>
             </div>
           </div>
